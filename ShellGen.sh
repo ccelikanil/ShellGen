@@ -301,6 +301,4 @@ generateShell () {
 	esac
 	
 	echo "\n\n\n\n\n##### Program terminated. #####"
-}
-
-generateShell
+}; generateShell
