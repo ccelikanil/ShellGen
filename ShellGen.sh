@@ -500,7 +500,7 @@ generateShell () {
 		echo "\nSeriously, just select 1 or 2:"; read answer
 		
 		checkAnswer() {
-		# m4tr1xisr3al
+		# hello Mr. Anderson, you know the m4tr1xisr3al
 			case $answer in
 				1)
 				echo "\nEnter RHOST:"; read RHOST
