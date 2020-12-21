@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# type "ln -s ~/path_to_file/ShellGen /usr/local/bin" to make the file executable from every directory
+
 echo "########## Created by 0xpr0N3rd (GitHub) ##########\n\n"
 # Cheat sheets from PentestMoney, Highon.Coffe and GTFOBins are used in this script. 
 
