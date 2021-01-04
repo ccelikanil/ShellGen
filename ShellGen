@@ -5,7 +5,7 @@
 echo "########## Created by 0xpr0N3rd (GitHub) ##########\n\n"
 # Cheat sheets from PentestMoney, Highon.Coffe and GTFOBins are used in this script. 
 
-echo "DISCLAIMER!!! This tool is developed only for legal purposes, such as CTFs. Developer does not take any responsibility in any kind of illegal usage.\n\n" 
+echo "DISCLAIMER!!! This tool is developed only for legal purposes, such as CTFs and pentesting. Developer does not take any responsibility in any kind of illegal usage.\n\n" 
 echo "##### Reverse Shell Generator v1.0 #####\n\n"
 
 echo "Select the shell type you want to generate. Here are the types currently supported:"
