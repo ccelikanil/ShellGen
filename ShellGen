@@ -558,7 +558,7 @@ generateShell () {
 			;;
 			
 			*)
-			echo "\n\nYou leave me no chance but terminating the program, sorry dude."
+			echo "\n\nYou left me no choice, sorry dude."
 			echo "\n\n##### Program terminated. #####"
 			exit 1
 			;;
